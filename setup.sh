@@ -2,7 +2,9 @@
 #
 
 function lns() {
-    ln -vs "$(pwd)/$1" "${HOME}/$2"
+    if [[ ! -e "${HOME}/$2" ]]; then
+        ln -vs "$(pwd)/$1" "${HOME}/$2"
+    fi
 }
 
 function lncs() {
