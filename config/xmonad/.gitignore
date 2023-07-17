@@ -1,0 +1,7 @@
+*.o
+*.hi
+*.log
+*.errors
+xmonad-x86_64-linux
+.stack-work
+build-x86_64-linux

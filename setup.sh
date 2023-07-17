@@ -17,4 +17,5 @@ function lnhs() {
 
 
 lncs "nvim" "nvim"
+lncs "xmonad" "xmonad"
 lnhs "wezterm.lua" ".wezterm.lua"
