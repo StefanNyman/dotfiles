@@ -1,7 +1,11 @@
 local status, nvim_lsp = pcall(require, "lspconfig")
 if (not status) then return end
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+-- local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local lsp_defaults = nvim_lsp.util.default_config
+
+lsp_defaults.capabilities = vim.tbl_deep_extend("force", lsp_defaults.capabilities,
+    require("cmp_nvim_lsp").default_capabilities())
 
 local on_attach = function(client)
     vim.buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -41,7 +45,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 nvim_lsp.lua_ls.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
     settings = {
         Lua = {
@@ -63,11 +66,9 @@ nvim_lsp.lua_ls.setup {
 }
 
 nvim_lsp.pyright.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
 nvim_lsp.gopls.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
     settings = {
         gopls = {
@@ -76,19 +77,15 @@ nvim_lsp.gopls.setup {
     },
 }
 nvim_lsp.asm_lsp.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
 nvim_lsp.awk_ls.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
 nvim_lsp.bashls.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
 nvim_lsp.ccls.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
     init_options = {
         compilationDatabaseDirectory = "build",
@@ -103,53 +100,51 @@ nvim_lsp.ccls.setup {
 }
 nvim_lsp.clojure_lsp.setup {
     on_attach = on_attach,
-    capabilities = capabilities,
 }
 nvim_lsp.cmake.setup {
     on_attach = on_attach,
-    capabilities = capabilities,
+}
+nvim_lsp.dartls.setup {
+    on_attach = on_attach,
 }
 nvim_lsp.dockerls.setup {
     on_attach = on_attach,
-    capabilities = capabilities,
 }
 nvim_lsp.elixirls.setup {
     on_attach = on_attach,
-    capabilities = capabilities,
 }
 nvim_lsp.elmls.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
 nvim_lsp.erlangls.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
 nvim_lsp.jsonnet_ls.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
-nvim_lsp.nimls.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-}
-nvim_lsp.rust_analyzer.setup {
-    capabilities = capabilities,
+nvim_lsp.nim_langserver.setup {
     on_attach = on_attach,
 }
 nvim_lsp.texlab.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
 nvim_lsp.tsserver.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
 nvim_lsp.terraformls.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
 nvim_lsp.zls.setup {
-    capabilities = capabilities,
     on_attach = on_attach,
 }
+
+local rt = require("rust-tools")
+
+rt.setup({
+    server = {
+        on_attach = function(_, bufnr)
+            vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+            vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+        end
+    }
+})
